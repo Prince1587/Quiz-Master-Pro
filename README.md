@@ -51,6 +51,27 @@ Quiz Master Pro is a feature-rich, modern quiz application that allows users to 
 - **🎨 Custom Categories** - Create your own quiz categories
 
 ---
+quiz-master-pro/
+├── public/
+│   ├── index.html          # HTML template
+│   └── manifest.json       # PWA manifest
+├── src/
+│   ├── components/
+│   │   ├── QuizBuilder.js      # Quiz creation interface
+│   │   ├── QuizList.js         # Quiz browsing & filtering
+│   │   ├── QuizPlayer.js       # Quiz taking experience
+│   │   ├── Statistics.js       # Analytics dashboard
+│   │   └── QuizHistory.js      # Past attempts view
+│   ├── context/
+│   │   └── QuizContext.js      # Global state management
+│   ├── data/
+│   │   └── initialQuizzes.js   # Pre-loaded quiz data
+│   ├── App.js              # Main app wrapper
+│   ├── index.js            # React root
+│   └── index.css           # Tailwind styles
+├── postcss.config.js       # PostCSS configuration
+├── tailwind.config.js      # Tailwind configuration
+└── package.json            # Dependencies and scripts
 
 ## 🚀 Quick Start
 ```bash
