@@ -20,6 +20,15 @@
 Quiz Master Pro is a feature-rich, modern quiz application that allows users to create, take, and manage quizzes with an intuitive interface. Built with React and styled with Tailwind CSS, it offers a seamless experience across all devices.
 
 ---
+## 🌐 Live Demo
+
+[**🚀 View Live App**](https://notes-app-55fq.vercel.app/) 
+
+## 📸 Screenshots
+
+### Desktop View
+
+![Desktop Screenshot](notes.jpg)
 
 ## ✨ Features
 
