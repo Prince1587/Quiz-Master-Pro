@@ -22,7 +22,7 @@ Quiz Master Pro is a feature-rich, modern quiz application that allows users to 
 ---
 ## 🌐 Live Demo
 
-[**🚀 View Live App**](https://notes-app-55fq.vercel.app/) 
+[**🚀 View Live App**](https://quiz-master-pro-chi.vercel.app/) 
 
 ## 📸 Screenshots
 
@@ -97,3 +97,21 @@ npm install
 
 # Start the development server
 npm start
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open Pull Request
+
+## 📄 License
+
+MIT License - feel free to use in your projects!
+
+---
+
+**🎉 Start capturing your brilliant ideas today!** ✨
+
+_Built with ❤️ using React & Tailwind CSS_
