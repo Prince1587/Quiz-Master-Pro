@@ -50,7 +50,8 @@ Quiz Master Pro is a feature-rich, modern quiz application that allows users to 
 - **✅ Answer Review** - Detailed post-quiz analysis with correct answers
 - **🎨 Custom Categories** - Create your own quiz categories
 
----
+## 🔧 File Structure
+```
 quiz-master-pro/
 ├── public/
 │   ├── index.html          # HTML template
@@ -72,6 +73,7 @@ quiz-master-pro/
 ├── postcss.config.js       # PostCSS configuration
 ├── tailwind.config.js      # Tailwind configuration
 └── package.json            # Dependencies and scripts
+```
 
 ## 🚀 Quick Start
 ```bash
