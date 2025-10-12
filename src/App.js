@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { Home, Plus, BarChart3, History, Moon, Sun } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Home, Plus, BarChart3, History, Moon, Sun, LogOut, User } from 'lucide-react';
 import { QuizProvider, useQuizContext } from './context/QuizContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import QuizBuilder from './components/QuizBuilder';
 import QuizList from './components/QuizList';
 import QuizPlayer from './components/QuizPlayer';
 import Statistics from './components/Statistics';
 import QuizHistory from './components/QuizHistory';
+import AuthPage from './components/AuthPage';
+import PrivateRoute from './components/PrivateRoute';
 
 const MainApp = () => {
   const [view, setView] = useState('home');
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const { darkMode, setDarkMode } = useQuizContext();
+  const { currentUser, logout } = useAuth();
 
   const handleStartQuiz = (quiz) => {
     setSelectedQuiz(quiz);
@@ -22,13 +27,28 @@ const MainApp = () => {
     setView('home');
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100'} py-4 md:py-8 px-4`}>
       <div className="max-w-7xl mx-auto mb-4 md:mb-8">
         <div className={`flex flex-col md:flex-row items-center justify-between ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-2xl shadow-lg p-4 md:p-6 border gap-4 md:gap-0`}>
-          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            Quiz Master Pro
-          </h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Quiz Master Pro
+            </h1>
+            {currentUser && (
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-purple-50'}`}>
+                <User size={16} className="text-purple-600" />
+                <span className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                  {currentUser.name}
+                </span>
+              </div>
+            )}
+          </div>
+          
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 w-full md:w-auto">
             <button onClick={() => setDarkMode(!darkMode)} className={`p-2 md:p-3 rounded-xl transition-all ${darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-100 text-gray-700'}`}>
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -49,6 +69,10 @@ const MainApp = () => {
               <History size={18} />
               <span className="hidden sm:inline">History</span>
             </button>
+            <button onClick={handleLogout} className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-xl transition-all font-semibold text-sm md:text-base ${darkMode ? 'bg-red-900 text-red-300 hover:bg-red-800' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}>
+              <LogOut size={18} />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
           </div>
         </div>
       </div>
@@ -64,9 +88,24 @@ const MainApp = () => {
 
 const App = () => {
   return (
-    <QuizProvider>
-      <MainApp />
-    </QuizProvider>
+    <Router>
+      <AuthProvider>
+        <QuizProvider>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route 
+              path="/" 
+              element={
+                <PrivateRoute>
+                  <MainApp />
+                </PrivateRoute>
+              } 
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </QuizProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
