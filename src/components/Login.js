@@ -25,7 +25,22 @@ const Login = ({ onSwitchToSignup }) => {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      setError(err.message);
+      // Add friendly error messages
+      let errorMessage = 'An error occurred. Please try again.';
+      
+      if (err.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email.';
+      } else if (err.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password.';
+      } else if (err.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address.';
+      } else if (err.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      } else if (err.code === 'auth/invalid-credential') {
+        errorMessage = 'Invalid email or password.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

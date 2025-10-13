@@ -37,11 +37,20 @@ const Signup = ({ onSwitchToLogin }) => {
       await signup(email, password, name);
       navigate('/');
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      let errorMessage = 'An error occurred. Please try again.';
+
+      if (err.code === 'auth/email-already-in-use') {
+        errorMessage = 'An account already exists with this email.';
+      }else if (err.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address.';
+      } else if (err.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak. Use at least 6 characters.';
+      }
+      setError(errorMessage);
+    }finally {
+     setLoading(false);
     }
-  };
+ };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100 flex items-center justify-center p-4">
