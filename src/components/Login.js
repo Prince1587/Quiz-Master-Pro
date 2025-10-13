@@ -22,8 +22,14 @@ const Login = ({ onSwitchToSignup }) => {
     try {
       setError('');
       setLoading(true);
+      
       await login(email, password);
-      navigate('/');
+      
+      // Small delay to ensure auth state is updated
+      setTimeout(() => {
+        navigate('/');
+      }, 500);
+      
     } catch (err) {
       // Add friendly error messages
       let errorMessage = 'An error occurred. Please try again.';
@@ -41,7 +47,6 @@ const Login = ({ onSwitchToSignup }) => {
       }
       
       setError(errorMessage);
-    } finally {
       setLoading(false);
     }
   };
@@ -98,9 +103,16 @@ const Login = ({ onSwitchToSignup }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                Logging in...
+              </>
+            ) : (
+              'Login'
+            )}
           </button>
         </form>
 

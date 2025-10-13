@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -12,11 +11,12 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Add this for debugging
+console.log('Firebase initialized:', app.name);
+console.log('Auth ready:', auth.currentUser ? 'User logged in' : 'No user');
 
 export default app;
