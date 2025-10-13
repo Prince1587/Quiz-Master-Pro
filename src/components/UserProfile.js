@@ -219,18 +219,7 @@ const UserProfile = () => {
           )}
         </div>
       </div>
-
-      {/* Test Save Attempt Button */}
-      {!testSaved && (
-        <div className="text-center mb-4">
-          <button
-            onClick={handleTestSave}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all shadow-lg"
-          >
-            Test Save Attempt
-          </button>
-        </div>
-      )}
+      
 
       {/* Logout Button */}
       <div className="text-center">
