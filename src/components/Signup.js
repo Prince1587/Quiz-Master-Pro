@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { UserPlus, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 const Signup = ({ onSwitchToLogin }) => {
   const [name, setName] = useState('');
@@ -10,8 +9,8 @@ const Signup = ({ onSwitchToLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
+  const { signup, logout } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,26 +30,73 @@ const Signup = ({ onSwitchToLogin }) => {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     try {
       setError('');
       setLoading(true);
+      
       await signup(email, password, name);
-      navigate('/');
+      await logout(); // Logout to prevent auto-login
+      
+      setSuccess(true);
+      
+      // Auto redirect after 5 seconds
+      setTimeout(() => {
+        onSwitchToLogin();
+      }, 5000);
+      
     } catch (err) {
       let errorMessage = 'An error occurred. Please try again.';
-
+      
       if (err.code === 'auth/email-already-in-use') {
         errorMessage = 'An account already exists with this email.';
-      }else if (err.code === 'auth/invalid-email') {
+      } else if (err.code === 'auth/invalid-email') {
         errorMessage = 'Invalid email address.';
       } else if (err.code === 'auth/weak-password') {
         errorMessage = 'Password is too weak. Use at least 6 characters.';
       }
+      
       setError(errorMessage);
-    }finally {
-     setLoading(false);
+      setLoading(false);
     }
- };
+  };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-200 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
+            <CheckCircle className="text-green-600" size={48} />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Check Your Email!</h2>
+          <p className="text-gray-600 mb-4">
+            We've sent a verification link to:
+          </p>
+          <p className="text-purple-600 font-semibold text-lg mb-6">{email}</p>
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+            <p className="text-sm text-blue-800">
+              📧 Please check your inbox and click the verification link to activate your account.
+            </p>
+          </div>
+          <p className="text-sm text-gray-500 mb-4">
+            Didn't receive the email? Check your spam folder.
+          </p>
+          <button
+            onClick={onSwitchToLogin}
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-100 to-pink-100 flex items-center justify-center p-4">
@@ -138,9 +184,16 @@ const Signup = ({ onSwitchToLogin }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                Creating account...
+              </>
+            ) : (
+              'Create Account'
+            )}
           </button>
         </form>
 
@@ -150,6 +203,7 @@ const Signup = ({ onSwitchToLogin }) => {
             <button
               onClick={onSwitchToLogin}
               className="text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+              disabled={loading}
             >
               Login
             </button>
