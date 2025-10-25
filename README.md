@@ -28,7 +28,7 @@ Quiz Master Pro is a feature-rich, modern quiz application that allows users to 
 
 ### Desktop View
 
-![Desktop Screenshot](notes.jpg)
+![Desktop Screenshot](https://github.com/Prince1587/Quiz-Master-Pro/blob/main/public/Images/SS1.jpg)
 
 ## ✨ Features
 
